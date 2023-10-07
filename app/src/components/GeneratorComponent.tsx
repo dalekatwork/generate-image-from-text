@@ -12,18 +12,30 @@ export default function GeneratorComponent() {
   const [imageSrc, setImageSrc] = useState(data['INITIAL_IMAGE'])
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState(data['INITIAL_SEARCH']);
+  const [isApiFailed, setIsApiFailed] = useState(false);
 
   const onFinish = async (values: TextToImage) => {
     setLoading(true)
     setQuery(values.text)
     const response = await generateImage(values)
-    setImageSrc('data:image/jpeg;base64,' + response.data)
+    if (response?.status != 200) {
+      setIsApiFailed(true)
+      return
+    }
+    setImageSrc('data:image/jpeg;base64,' + response?.data)
     setLoading(false)
   };
 
-  return <PageLayout query={query} loading={loading}>
+  const onPageReset = () => {
+    form.setFieldValue('text', '')
+    setImageSrc('')
+    setIsApiFailed(false)
+    setLoading(false)
+  }
+
+  return <PageLayout onPageReset={onPageReset} query={query} loading={loading} showFailure={isApiFailed}>
     <Row justify="space-around" align="middle" gutter={32}>
-      <TextToImageForm form={form} onFinish={onFinish}/>
+      <TextToImageForm form={form} onFinish={onFinish} onReset={onPageReset} />
       <GeneratedImageDisplay loading={loading} imageSrc={imageSrc} />
     </Row>
   </PageLayout>

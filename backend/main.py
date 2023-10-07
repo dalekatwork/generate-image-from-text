@@ -6,9 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing_extensions import Annotated
 
 from schemas import TextToImage
-from utils import util_convert_text_to_image
-
-import config
+import services, config
 
 @lru_cache()
 def get_settings():
@@ -28,12 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
-
+    return {"message": "Welcome to Image Generator Tool"}
 
 @app.post("/convert_text_to_image",responses = { 200: { "content": {"application/octet-stream": {}} }})
 async def convert_text_to_image(payload: TextToImage, settings: Annotated[config.Settings, Depends(get_settings)]):
-    return util_convert_text_to_image(settings, payload)
+    return services.convert_text_to_image(settings, payload)

@@ -2,7 +2,7 @@ from fastapi.responses import Response
 import requests, config
 from schemas import TextToImage
 
-def util_convert_text_to_image(settings: config.Settings, payload: TextToImage):
+def convert_text_to_image(settings: config.Settings, payload: TextToImage):
 
     url = settings.api_url
     body = {
@@ -35,6 +35,8 @@ def util_convert_text_to_image(settings: config.Settings, payload: TextToImage):
         raise Exception("Non-200 response: " + str(response.text))
     
     data = response.json()
-    result_image = data["artifacts"][0]
+    if data["artifacts"] and len(data["artifacts"]) == 0:
+        raise Exception("Non-200 response: " + "Api returned no response")
     
+    result_image = data["artifacts"][0]
     return Response(content=result_image["base64"], media_type="application/octet-stream")

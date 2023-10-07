@@ -11,12 +11,13 @@ function GeneratedImageDisplay(props: GeneratedImageDisplayProps) {
 
   return <Col sm={24} md={24} lg={12}>
     {loading ?
-  <Skeleton.Image style={{ height: 720, width: 720 }} active={loading} /> :
-  <Image
-    src={imageSrc}
-        fallback={data['FALLBACK_IMAGE']}
-        alt="Generating image from prompt"
-  />}
+      <Skeleton.Image style={{ height: 720, width: 720 }} active={loading} /> :
+      <Image
+            src={imageSrc}
+            style={{ minHeight: 720, minWidth: 720 }} 
+            fallback={data['FALLBACK_IMAGE']}
+            alt="Generating image from prompt"
+      />}
   </Col>
 }
 

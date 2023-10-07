@@ -5,10 +5,11 @@ import { Button, Col, Form, FormInstance, Input } from "antd";
 interface TextToImageFormProps{
   form: FormInstance,
   onFinish?: (values: TextToImage) => void,
+  onReset?: () => void,
 }
 
 function TextToImageForm(props: TextToImageFormProps) {
-  const { form, onFinish } = props;
+  const { form, onFinish, onReset } = props;
 
   return <Col sm={24} md={24} lg={12}>
     <Form
@@ -18,6 +19,7 @@ function TextToImageForm(props: TextToImageFormProps) {
     initialValues={{
       text: data['INITIAL_SEARCH']
     }}
+    onReset={onReset}
     size="large"
   >
     <Form.Item name="text" label="Enter prompt">
@@ -25,6 +27,7 @@ function TextToImageForm(props: TextToImageFormProps) {
     </Form.Item>
     <Form.Item>
       <Button type="primary" htmlType="submit">Generate</Button>
+      <Button style={{marginLeft: 16}} htmlType="reset">Reset</Button>
     </Form.Item>
     </Form>
   </Col>
