@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 class TextToImage(BaseModel):
-    text: str
+    text: constr(min_length=3)
